@@ -17,19 +17,29 @@ class App extends React.Component {
     super(props);
     this.state = {
       tracks: [],
+      selectedTracks: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleAddToPlaylist = this.handleAddToPlaylist.bind(this);
   }
 
   async handleSearch(term) {
     try {
-      let response = await Spotify.search(term);
+      let tracks = await Spotify.search(term);
       this.setState({
-        tracks: response,
+        tracks,
       });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  handleAddToPlaylist(track) {
+    const selectedTracks = this.state.selectedTracks;
+    selectedTracks.push(track);
+    this.setState({
+      selectedTracks,
+    });
   }
 
   render() {
@@ -42,6 +52,19 @@ class App extends React.Component {
           artist={track.artist}
           key={nanoid()}
           state="tracklist"
+          onAdd={this.handleAddToPlaylist}
+        ></Track>
+      );
+    });
+    const addedTracks = this.state.selectedTracks.map((track) => {
+      return (
+        <Track
+          bg="even:bg-indigo-400 odd:bg-indigo-600"
+          title={track.title}
+          album={track.album}
+          artist={track.artist}
+          key={nanoid()}
+          state="playlist"
         ></Track>
       );
     });
@@ -51,7 +74,7 @@ class App extends React.Component {
         <SearchBar onSearch={this.handleSearch} />
         <APPMainWrapper className="px-3">
           <TrackList>{tracks}</TrackList>
-          <Playlist></Playlist>
+          <Playlist>{addedTracks}</Playlist>
         </APPMainWrapper>
       </APPWrapper>
     );
