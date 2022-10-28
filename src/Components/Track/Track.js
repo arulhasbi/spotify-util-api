@@ -5,6 +5,7 @@ export class Track extends React.Component {
   constructor(props) {
     super(props);
     this.onAdd = this.onAdd.bind(this);
+    this.onRemove = this.onRemove.bind(this);
   }
 
   onAdd() {
@@ -12,7 +13,12 @@ export class Track extends React.Component {
       title: this.props.title,
       album: this.props.album,
       artist: this.props.artist,
+      id: this.props.id,
     });
+  }
+
+  onRemove() {
+    this.props.onRemove(this.props.id);
   }
 
   render() {
@@ -31,8 +37,8 @@ export class Track extends React.Component {
             </button>
           )}
           {this.props.state === "playlist" && (
-            <button type="button">
-              <span class="material-symbols-outlined">cancel</span>
+            <button type="button" onClick={this.onRemove}>
+              <span className="material-symbols-outlined">cancel</span>
             </button>
           )}
         </TMaxWidth>

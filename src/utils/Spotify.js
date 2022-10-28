@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid/non-secure";
+
 const clientID = "96a1e8fce81c4327a788ffc574c86413";
 const redirectURI = "http://localhost:3000/callback/";
 const spotifyURL = `https://accounts.spotify.com/authorize?response_type=token&scope=playlist-modify-public&client_id=${clientID}&redirect_uri=${redirectURI}`;
@@ -33,6 +35,7 @@ export const Spotify = {
     const responseJSON = await response.json();
     let tracks = responseJSON.tracks.items.map((track) => {
       return {
+        id: nanoid(),
         title: track.name,
         album: track.album.name,
         artist: track.artists[0].name,
