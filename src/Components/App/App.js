@@ -21,6 +21,7 @@ class App extends React.Component {
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleAddToPlaylist = this.handleAddToPlaylist.bind(this);
+    this.handleRemoveFromPlaylist = this.handleRemoveFromPlaylist.bind(this);
   }
 
   async handleSearch(term) {
@@ -42,6 +43,16 @@ class App extends React.Component {
     });
   }
 
+  handleRemoveFromPlaylist(id) {
+    let tracks = this.state.selectedTracks;
+    tracks = tracks.filter((track) => {
+      return track.id !== id;
+    });
+    this.setState({
+      selectedTracks: tracks,
+    });
+  }
+
   render() {
     const tracks = this.state.tracks.map((track) => {
       return (
@@ -51,6 +62,7 @@ class App extends React.Component {
           album={track.album}
           artist={track.artist}
           key={nanoid()}
+          id={track.id}
           state="tracklist"
           onAdd={this.handleAddToPlaylist}
         ></Track>
@@ -64,7 +76,9 @@ class App extends React.Component {
           album={track.album}
           artist={track.artist}
           key={nanoid()}
+          id={track.id}
           state="playlist"
+          onRemove={this.handleRemoveFromPlaylist}
         ></Track>
       );
     });
