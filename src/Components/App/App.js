@@ -18,10 +18,14 @@ class App extends React.Component {
     this.state = {
       tracks: [],
       selectedTracks: [],
+      playlistName: "",
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleAddToPlaylist = this.handleAddToPlaylist.bind(this);
     this.handleRemoveFromPlaylist = this.handleRemoveFromPlaylist.bind(this);
+    this.handlChangePlaylistName = this.handlChangePlaylistName.bind(this);
+    this.handleCreatePlaylist = this.handleCreatePlaylist.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
 
   async handleSearch(term) {
@@ -53,6 +57,37 @@ class App extends React.Component {
     });
   }
 
+  handlChangePlaylistName(name) {
+    if (name !== "") {
+      this.setState({
+        playlistName: name,
+      });
+    } else {
+      console.log("Make sure you fill out the playlist name!");
+    }
+  }
+
+  async resetState() {
+    await this.setState({
+      tracks: [],
+      selectedTracks: [],
+      playlistName: "",
+    });
+  }
+
+  async handleCreatePlaylist() {
+    const playlistName = this.state.playlistName;
+    const selectedTracks = this.state.selectedTracks;
+    const response = await Spotify.saveToPlaylist(playlistName, selectedTracks);
+    if (response.snapshot_id) {
+      window.alert(`${playlistName} succesfully created!`);
+      await this.resetState();
+      window.location.reload();
+    } else {
+      console.log("something wrong, please try later.");
+    }
+  }
+
   render() {
     const tracks = this.state.tracks.map((track) => {
       return (
@@ -63,6 +98,7 @@ class App extends React.Component {
           artist={track.artist}
           key={nanoid()}
           id={track.id}
+          uri={track.uri}
           state="tracklist"
           onAdd={this.handleAddToPlaylist}
         ></Track>
@@ -77,6 +113,7 @@ class App extends React.Component {
           artist={track.artist}
           key={nanoid()}
           id={track.id}
+          uri={track.uri}
           state="playlist"
           onRemove={this.handleRemoveFromPlaylist}
         ></Track>
@@ -88,7 +125,12 @@ class App extends React.Component {
         <SearchBar onSearch={this.handleSearch} />
         <APPMainWrapper className="px-3">
           <TrackList>{tracks}</TrackList>
-          <Playlist>{addedTracks}</Playlist>
+          <Playlist
+            onChangePlaylistName={this.handlChangePlaylistName}
+            onCreatePlaylist={this.handleCreatePlaylist}
+          >
+            {addedTracks}
+          </Playlist>
         </APPMainWrapper>
       </APPWrapper>
     );

@@ -1,3 +1,4 @@
+// generate uniques identifier as keys for track list
 import { nanoid } from "nanoid/non-secure";
 
 const clientID = "96a1e8fce81c4327a788ffc574c86413";
@@ -39,8 +40,62 @@ export const Spotify = {
         title: track.name,
         album: track.album.name,
         artist: track.artists[0].name,
+        uri: track.uri,
       };
     });
     return tracks;
+  },
+  // methods needed to create and add items into newly created playlist
+  async getUserID() {
+    const userURL = `${baseURL}/me`;
+    const userResponse = await fetch(userURL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const userResponseJSON = await userResponse.json();
+    const userID = userResponseJSON.id;
+    return userID;
+  },
+  async createPlaylist(userID, name) {
+    const playlistURL = `${baseURL}/users/${userID}/playlists`;
+    const createResponseData = JSON.stringify({
+      name: name,
+    });
+    const createResponse = await fetch(playlistURL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: createResponseData,
+    });
+    const createResponseJSON = await createResponse.json();
+    const playlistID = createResponseJSON.id;
+    return playlistID;
+  },
+  async addItemToPlaylist(name, tracks) {
+    const userID = await this.getUserID();
+    const playlistID = await this.createPlaylist(userID, name);
+    const addToPlaylistURL = `${baseURL}/playlists/${playlistID}/tracks`;
+    const trackURIS = tracks.map((track) => {
+      return track.uri;
+    });
+    const addToPlaylistResponse = await fetch(addToPlaylistURL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uris: trackURIS,
+      }),
+    });
+    const addToPlaylistResponseJSON = addToPlaylistResponse.json();
+    return addToPlaylistResponseJSON;
+  },
+  async saveToPlaylist(name, tracks) {
+    const response = await this.addItemToPlaylist(name, tracks);
+    return response;
   },
 };
