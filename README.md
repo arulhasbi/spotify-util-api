@@ -4,6 +4,9 @@ Hi, it's been a full year since I left coding due to family matter. So, I have b
 
 ### Project Description
 
+![](https://github.com/
+spotify-util-api/Jammming-gif)
+
 Jammming is a one-simple-page of react application which utilize Spotify API to create a new playlist for spotify users. The functionalities within the app are limited to:
 
 - Searching tracks, artists, and albums
