@@ -1,4 +1,4 @@
-# Project Jammming
+# Jammming
 
 Hi, it's been a full year since I left coding due to family matter. So, I have been doing the full-stack engineer course path from an online platform, [Codecademy](https://www.codecademy.com) as a quick skill-refresher. This **Jammming** project is the first front-end app from the course path that I built using with react and tailwind (a cool utility-first css framework).
 
