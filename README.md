@@ -13,7 +13,7 @@ Jammming is a one-simple-page of react application which utilize Spotify API to 
 - Remove tracks from not yet created playlist
 - Save newly created playlist to the user
 
-### Tech Stacks
+### Stacks
 
 - React
 - Tailwind CSS
