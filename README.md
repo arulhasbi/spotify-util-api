@@ -15,7 +15,7 @@ Jammming is a one-simple-page of react application which utilize Spotify API to 
 
 ### Dependencies
 
-* Tailwind CSS: `^3.2.1`
+* [Tailwind CSS](https://tailwindcss.com/): `^3.2.1`
 
 ### Available Scripts
 
